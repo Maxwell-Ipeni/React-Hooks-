@@ -4,7 +4,7 @@ export async function fetchUsers(signal) {
   const response = await fetch(BASE_URL, { signal });
   if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
   const data = await response.json();
-  return Array.isArray(data?.users) ? data.users : [];
+  return data?.users;
 }
 
 export async function createUser(user) {
@@ -19,11 +19,25 @@ export async function createUser(user) {
 
 export async function updateUser(userId, patch) {
   const response = await fetch(`${BASE_URL}/${userId}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(patch)
   });
-  if (!response.ok) throw new Error(`Update failed with status ${response.status}`);
+  if (!response.ok) {
+    let apiMessage = '';
+    try {
+      const payload = await response.json();
+      apiMessage = payload?.message || payload?.error || '';
+    } catch (_) {
+      try {
+        apiMessage = await response.text();
+      } catch (_) {
+        apiMessage = '';
+      }
+    }
+    const suffix = apiMessage ? `: ${apiMessage}` : '';
+    throw new Error(`Update failed with status ${response.status}${suffix}`);
+  }
   return response.json();
 }
 

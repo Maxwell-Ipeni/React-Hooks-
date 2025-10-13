@@ -51,6 +51,7 @@ function App() {
 
   async function handleUpdate(user) {
     try {
+      setError(null);
       const updated = await apiUpdateUser(user.id, { lastName: `${user.lastName} (Updated)` });
       setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, ...updated } : u)));
     } catch (err) {
@@ -60,10 +61,11 @@ function App() {
 
   async function handleDelete(userId) {
     try {
+      setError(null);
       await apiDeleteUser(userId);
       setUsers((prev) => prev.filter((u) => u.id !== userId));
     } catch (err) {
-      setError(err.message || 'Failed to delete user');
+      setError('Failed to delete user');
     }
   }
   return (
@@ -89,12 +91,11 @@ function App() {
         />
         {loading && <p>Loading users…</p>}
         {!loading && error && (
-          <p role="alert" style={{ color: 'salmon' }}>Failed to load users: {error}</p>
+          <p role="alert" style={{ color: 'salmon' }}>{error}</p>
         )}
-        {!loading && !error && users.length === 0 && <p>No users found.</p>}
-        {!loading && !error && users.length > 0 && (
+        {!loading && !error && (
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            {users.map((u) => (
+            {users?.map((u) => (
               <UserCard key={u.id} user={u} onUpdate={handleUpdate} onDelete={handleDelete} />
             ))}
           </ul>
