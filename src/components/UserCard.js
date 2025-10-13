@@ -1,20 +1,12 @@
 import React from 'react';
+import './UserCard.css';
 
 function UserCard({ user, onUpdate, onDelete }) {
   if (!user) return null;
 
   return (
-    <li style={{
-      border: '1px solid #666',
-      borderRadius: 10,
-      padding: 16,
-      marginBottom: 14,
-      background: '#26292e',
-      color: '#f1f1f1',
-      boxShadow: '0 4px 14px rgba(0,0,0,0.35)',
-      lineHeight: 1.4
-    }}>
-      <div style={{ fontSize: 18, fontWeight: 600 }}>{user.firstName} {user.lastName}</div>
+    <li className="card">
+      <div className="cardHeader">{user.firstName} {user.lastName}</div>
       <div>Age: {user.age}</div>
       <div>Phone: {user.phone}</div>
       <div>height:{user.height}</div>
@@ -22,9 +14,9 @@ function UserCard({ user, onUpdate, onDelete }) {
       <div>birthDate:{user.birthDate}</div>
       <img src={user.image} alt={user.firstName} />
       {user.email && <div>Email: {user.email}</div>}
-      <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+      <div className="actions">
         <button onClick={() => onUpdate && onUpdate(user)}>Update (PUT)</button>
-        <button onClick={() => onDelete && onDelete(user.id)} style={{ color: '#fff', background: '#b00020' }}>Delete (DELETE)</button>
+        <button onClick={() => onDelete && onDelete(user.id)} className="deleteButton">Delete (DELETE)</button>
       </div>
     </li>
   );

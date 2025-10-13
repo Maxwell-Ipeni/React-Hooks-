@@ -1,0 +1,19 @@
+.formGridThreeRows {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(3, auto);
+  gap: 8px;
+  margin: 16px 0;
+  align-items: center;
+}
+
+.formGridThreeRows input {
+  padding: 8px;
+}
+
+.formGridThreeRows .submitButtonCell {
+  grid-row: 3;
+  height: 36px;
+}
+
+

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
+import './App.css';
 import UserCard from './components/UserCard';
+import UserForm from './components/UserForm.jsx';
+import { fetchUsers, createUser as apiCreateUser, updateUser as apiUpdateUser, deleteUser as apiDeleteUser } from './services/usersApi';
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -16,18 +19,8 @@ function App() {
   
     (async () => {
       try {
-        const res = await fetch('https://dummyjson.com/users', { signal: controller.signal });
-        console.log("controller.signal", controller.signal);
-        if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
-        const data = await res.json();
-        console.log("data", data);
-        // data.users.map((user) => {
-        //   return {
-        //     ...user,
-        //     name: user.firstName + ' ' + user.lastName
-        //   }
-        // })
-        setUsers(Array.isArray(data?.users) ? data.users : []);
+        const list = await fetchUsers(controller.signal);
+        setUsers(list);
       } catch (err) {
         if (err.name !== 'AbortError') setError(err.message || 'Something went wrong');
       } finally {
@@ -38,41 +31,19 @@ function App() {
     return () => controller.abort();
   }, []);
   
-  async function createUser(user) {
-    const res = await fetch('https://dummyjson.com/users/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user)
-    });
-    if (!res.ok) throw new Error(`Create failed with status ${res.status}`);
-    return res.json();
-  }
-
-  async function updateUser(userId, patch) {
-    const res = await fetch(`https://dummyjson.com/users/${userId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch)
-    });
-    if (!res.ok) throw new Error(`Update failed with status ${res.status}`);
-    return res.json();
-  }
-
-  async function deleteUser(userId) {
-    const res = await fetch(`https://dummyjson.com/users/${userId}`, {
-      method: 'DELETE'
-    });
-    if (!res.ok) throw new Error(`Delete failed with status ${res.status}`);
-    return res.json();
-  }
+  // API helpers are in services/usersApi.js
 
   async function handleCreate(e) {
     e.preventDefault();
     try {
-      const created = await createUser({ firstName, lastName });
+      const created = await apiCreateUser({ firstName, lastName, weight, height, birthDate, age });
       setUsers((prev) => [created, ...prev]);
       setFirstName("");
       setLastName("");
+      setWeight("");
+      setHeight("");
+      setBirthDate("");
+      setAge("");
     } catch (err) {
       setError(err.message || 'Failed to create user');
     }
@@ -80,7 +51,7 @@ function App() {
 
   async function handleUpdate(user) {
     try {
-      const updated = await updateUser(user.id, { lastName: `${user.lastName} (Updated)` });
+      const updated = await apiUpdateUser(user.id, { lastName: `${user.lastName} (Updated)` });
       setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, ...updated } : u)));
     } catch (err) {
       setError(err.message || 'Failed to update user');
@@ -89,7 +60,7 @@ function App() {
 
   async function handleDelete(userId) {
     try {
-      await deleteUser(userId);
+      await apiDeleteUser(userId);
       setUsers((prev) => prev.filter((u) => u.id !== userId));
     } catch (err) {
       setError(err.message || 'Failed to delete user');
@@ -97,41 +68,25 @@ function App() {
   }
   return (
     <div>
-      <main style={{ padding: 16, maxWidth: 800, margin: '0 auto', textAlign: 'left' }}>
+      <main className="container">
         <h2>User Data Fetch Using useEffect and useState hooks</h2>
-        <form onSubmit={handleCreate} style={{ margin: '16px 0', display: 'flex', gap: 8 }}>
-          <input
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="First name"
-          />
-          <input
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Last name"
-          />
-          <input
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            placeholder="Weight"
-          />
-          <input
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
-            placeholder="Height"
-          />
-          <input
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            placeholder="Birth Date"
-          />
-          <input
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            placeholder="Age"
-          />
-          <button type="submit">Create (POST)</button>
-        </form>
+        <UserForm
+          firstName={firstName}
+          lastName={lastName}
+          weight={weight}
+          height={height}
+          birthDate={birthDate}
+          age={age}
+          onChange={(field, value) => {
+            if (field === 'firstName') setFirstName(value);
+            if (field === 'lastName') setLastName(value);
+            if (field === 'weight') setWeight(value);
+            if (field === 'height') setHeight(value);
+            if (field === 'birthDate') setBirthDate(value);
+            if (field === 'age') setAge(value);
+          }}
+          onSubmit={handleCreate}
+        />
         {loading && <p>Loading users…</p>}
         {!loading && error && (
           <p role="alert" style={{ color: 'salmon' }}>Failed to load users: {error}</p>
