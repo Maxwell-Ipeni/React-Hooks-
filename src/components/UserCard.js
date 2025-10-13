@@ -18,9 +18,11 @@ function UserCard({ user }) {
       <div>Age: {user.age}</div>
       <div>Phone: {user.phone}</div>
       <div>height:{user.height}</div>
+      <div>weight:{user.weight}</div>
       <div>birthDate:{user.birthDate}</div>
       <img src={user.image} alt={user.firstName} />
       {user.email && <div>Email: {user.email}</div>}
+
     </li>
   );
 }
