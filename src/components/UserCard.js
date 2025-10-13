@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UserCard({ user }) {
+function UserCard({ user, onUpdate, onDelete }) {
   if (!user) return null;
 
   return (
@@ -22,7 +22,10 @@ function UserCard({ user }) {
       <div>birthDate:{user.birthDate}</div>
       <img src={user.image} alt={user.firstName} />
       {user.email && <div>Email: {user.email}</div>}
-
+      <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+        <button onClick={() => onUpdate && onUpdate(user)}>Update (PUT)</button>
+        <button onClick={() => onDelete && onDelete(user.id)} style={{ color: '#fff', background: '#b00020' }}>Delete (DELETE)</button>
+      </div>
     </li>
   );
 }
