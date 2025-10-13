@@ -7,7 +7,10 @@ function App() {
   const [error, setError] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [age, setAge] = useState("");
   useEffect(() => {
     const controller = new AbortController();
   
@@ -106,6 +109,26 @@ function App() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder="Last name"
+          />
+          <input
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+            placeholder="Weight"
+          />
+          <input
+            value={height}
+            onChange={(e) => setHeight(e.target.value)}
+            placeholder="Height"
+          />
+          <input
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            placeholder="Birth Date"
+          />
+          <input
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            placeholder="Age"
           />
           <button type="submit">Create (POST)</button>
         </form>
