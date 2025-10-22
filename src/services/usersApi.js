@@ -21,12 +21,12 @@ export async function createUser(user) {
   return response.json();
 }
 
-//update user using the API
+//update user using the API  
 export async function updateUser(userId, patch) {
   const response = await fetch(`${BASE_URL}/${userId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(patch)
+    body: JSON.stringify(patch) 
   });
   if (!response.ok) {
     let apiMessage = '';
