@@ -1,5 +1,7 @@
 const BASE_URL = 'https://dummyjson.com/users';
 
+//fetch users from the API
+
 export async function fetchUsers(signal) {
   const response = await fetch(BASE_URL, { signal });
   if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
@@ -7,6 +9,7 @@ export async function fetchUsers(signal) {
   return data?.users;
 }
 
+//create user using the API
 export async function createUser(user) {
   const response = await fetch(`${BASE_URL}/add`, {
     method: 'POST',
@@ -17,6 +20,7 @@ export async function createUser(user) {
   return response.json();
 }
 
+//update user using the API
 export async function updateUser(userId, patch) {
   const response = await fetch(`${BASE_URL}/${userId}`, {
     method: 'PATCH',
@@ -41,6 +45,7 @@ export async function updateUser(userId, patch) {
   return response.json();
 }
 
+//delete user
 export async function deleteUser(userId) {
   const response = await fetch(`${BASE_URL}/${userId}`, { method: 'DELETE' });
   if (!response.ok) throw new Error(`Delete failed with status ${response.status}`);

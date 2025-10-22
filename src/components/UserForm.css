@@ -6,11 +6,11 @@
   margin: 16px 0;
   align-items: center;
 }
-
+/*input styling for the form*/
 .formGridThreeRows input {
   padding: 8px;
 }
-
+/*submit button styling for the form*/
 .formGridThreeRows .submitButtonCell {
   grid-row: 3;
   height: 36px;
