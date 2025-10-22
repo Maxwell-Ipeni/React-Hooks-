@@ -19,4 +19,3 @@ function UserForm({ firstName, lastName, weight, height, birthDate, age, onChang
 
 export default UserForm;
 
-

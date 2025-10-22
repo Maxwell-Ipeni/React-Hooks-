@@ -4,9 +4,23 @@ const BASE_URL = 'https://dummyjson.com/users';
 
 export async function fetchUsers(signal) {
   const response = await fetch(BASE_URL, { signal });
-  if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
-  const data = await response.json();
-  return data?.users;
+  
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (error) {
+    throw new Error(`Invalid JSON response: ${error.message}`);
+  }
+
+  if (!Array.isArray(data?.users)) {
+    throw new Error('Unexpected response format: expected "users" array');
+  }
+
+  return data.users;
 }
 
 //create user using the API
