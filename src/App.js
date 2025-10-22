@@ -4,6 +4,7 @@ import UserCard from './components/UserCard';
 import UserForm from './components/UserForm.jsx';
 import { fetchUsers, createUser as apiCreateUser, updateUser as apiUpdateUser, deleteUser as apiDeleteUser } from './services/usersApi';
 
+// state management using useEffect and useState hooks
 function App() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,30 +15,34 @@ function App() {
   const [height, setHeight] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [age, setAge] = useState("");
+
+  // fetch users from the API (Data loading using useEffect hook)
   useEffect(() => {
     const controller = new AbortController();
   
     (async () => {
       try {
         const list = await fetchUsers(controller.signal);
-        setUsers(list);
+        setUsers(list); //Update state with the fetched users
       } catch (err) {
-        if (err.name !== 'AbortError') setError(err.message || 'Something went wrong');
+        if (err.name !== 'AbortError') setError(err.message || 'Something went wrong'); //Update state with the error
       } finally {
-        setLoading(false);
+        setLoading(false); //Update state with the loading status
       }
     })();
   
-    return () => controller.abort();
+    //Cleanup function to abort the fetch request
+    return () => controller.abort(); 
   }, []);
   
-  // API helpers are in services/usersApi.js
 
+  // Create User Handler
   async function handleCreate(e) {
     e.preventDefault();
     try {
       const created = await apiCreateUser({ firstName, lastName, weight, height, birthDate, age });
-      setUsers((prev) => [created, ...prev]);
+      setUsers((prev) => [created, ...prev]); //add new user to top
+      //clear form fields
       setFirstName("");
       setLastName("");
       setWeight("");
@@ -49,9 +54,10 @@ function App() {
     }
   }
 
+  //updates user handler
   async function handleUpdate(user) {
     try {
-      setError(null);
+      setError(null); // clear previous error
       const updated = await apiUpdateUser(user.id, { lastName: `${user.lastName} (Updated)` });
       setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, ...updated } : u)));
     } catch (err) {
@@ -72,6 +78,8 @@ function App() {
     <div>
       <main className="container">
         <h2>User Data Fetch Using useEffect and useState hooks</h2>
+        
+        {/* form component to create a new user */}
         <UserForm
           firstName={firstName}
           lastName={lastName}

@@ -1,9 +1,11 @@
 import React from 'react';
 import './UserForm.css';
 
+//form component to create a new user
 function UserForm({ firstName, lastName, weight, height, birthDate, age, onChange, onSubmit }) {
   return (
     <form onSubmit={onSubmit} className="formGridThreeRows">
+      {/*text input fields for the form*/}
       <input value={firstName} onChange={(e) => onChange('firstName', e.target.value)} placeholder="First name" />
       <input value={lastName} onChange={(e) => onChange('lastName', e.target.value)} placeholder="Last name" />
       <input value={weight} onChange={(e) => onChange('weight', e.target.value)} placeholder="Weight" />
