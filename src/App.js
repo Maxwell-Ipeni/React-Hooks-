@@ -41,7 +41,7 @@ function App() {
     e.preventDefault();
     try {
       const created = await apiCreateUser({ firstName, lastName, weight, height, birthDate, age });
-      setUsers((prev) => [created, ...prev]); //add new user to top
+      setUsers((prev) => [created, ...prev]);  //add new user to top es6+
       //clear form fields
       setFirstName("");
       setLastName("");
@@ -104,7 +104,7 @@ function App() {
         {!loading && !error && (
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {users?.map((u) => (
-              <UserCard key={u.id} user={u} onUpdate={handleUpdate} onDelete={handleDelete} />
+              <UserCard key={u.ids} user={u} onUpdate={handleUpdate} onDelete={handleDelete} />
             ))}
           </ul>
         )}

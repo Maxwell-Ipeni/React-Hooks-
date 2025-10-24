@@ -8,7 +8,7 @@ function UserCard({ user, onUpdate, onDelete }) {
   return (
     <li className="card">
       <div className="cardHeader">{user.firstName} {user.lastName}</div>
-      <div>Age: {user.age}</div>
+      <div>Age: {user.ages}</div>
       <div>Phone: {user.phone}</div>
       <div>height:{user.height}</div>
       <div>weight:{user.weight}</div>

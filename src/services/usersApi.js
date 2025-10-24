@@ -12,7 +12,7 @@ export async function fetchUsers(signal) {
 
 //create user using the API
 export async function createUser(user) {
-  const response = await fetch(`${BASE_URL}/add`, {
+  const response = await fetch(`${BASE_URL}/addXXC`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(user)
